@@ -29,7 +29,6 @@ function Homepage() {
             </nav>
 
             <div className="flex-1 w-full px-24 pt-16 bg-yellow-50 flex items-center justify-between gap-16 relative overflow-hidden">
-                {/* soft decorative blob, purely atmospheric */}
                 <div className="absolute -top-20 right-32 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="max-w-xl relative z-10">
