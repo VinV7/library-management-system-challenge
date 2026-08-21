@@ -13,8 +13,8 @@ function SidebarButton({ active, icon, buttonText, onClick }) {
         <span
           className={
             active
-              ? "font-lustria text-2xl text-taupe-200 transition-colors duration-300"
-              : "font-lustria text-2xl text-white transition-colors duration-300"
+              ? "font-lustria text-2xl text-taupe-200 transition-colors duration-300 cursor-default"
+              : "font-lustria text-2xl text-white transition-colors duration-300 cursor-default"
           }
         >
           {buttonText}
