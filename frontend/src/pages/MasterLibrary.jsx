@@ -4,6 +4,7 @@ import { useState } from "react";
 // Components Import
 import Sidebar from "../components/Sidebar";
 import CatalogPanel from "../components/panel/CatalogPanel";
+import AddBookPanel from "../components/panel/AddBookPanel";
 
 function MasterLibrary() {
   const [activePanel, setActivePanel] = useState("Catalog");
@@ -26,6 +27,13 @@ function MasterLibrary() {
         }
       >
         <CatalogPanel></CatalogPanel>
+      </div>
+      <div
+        className={
+          activePanel === "Add Book" ? "flex flex-1 flex-col min-h-0" : "hidden"
+        }
+      >
+        <AddBookPanel></AddBookPanel>
       </div>
     </div>
   );
