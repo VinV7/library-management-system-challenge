@@ -1,6 +1,3 @@
-// Main Import
-import { useState } from "react";
-
 // Components Import
 import SidebarButton from "./SidebarButton";
 
