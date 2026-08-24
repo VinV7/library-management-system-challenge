@@ -1,3 +1,5 @@
+import BookEditSidePanel from "./BookEditSidePanel";
+
 function SidebarButton({ active, icon, buttonText, onClick }) {
   return (
     <div
@@ -20,6 +22,9 @@ function SidebarButton({ active, icon, buttonText, onClick }) {
           {buttonText}
         </span>
       </div>
+      <BookEditSidePanel >
+
+      </BookEditSidePanel>
     </div>
   );
 }
