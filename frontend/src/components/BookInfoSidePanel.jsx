@@ -15,7 +15,6 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
         ${panelOpen ? "block" : "hidden"}
       `}
     >
-      {/* Header */}
       <div className="flex w-full h-10 justify-end items-center mb-4">
         <div
           className="
@@ -32,7 +31,6 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
         </div>
       </div>
 
-      {/* Book Cover */}
       <div
         className="
           flex items-center justify-center
@@ -48,10 +46,8 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
         />
       </div>
 
-      {/* Book Information */}
       <div className="w-full mt-7 space-y-5">
 
-        {/* Title */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-neutral-600">
             Title
@@ -68,7 +64,6 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
           </div>
         </div>
 
-        {/* Genres */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-neutral-600">
             Genres
@@ -86,7 +81,6 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
           </div>
         </div>
 
-        {/* Release Date */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-neutral-600">
             Release Date
@@ -104,10 +98,8 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
           </div>
         </div>
 
-        {/* Stock / ISBN */}
         <div className="flex w-full gap-5">
 
-          {/* Stock */}
           <div className="flex flex-col gap-2">
             <label className="block text-sm font-medium text-neutral-600">
               Stock
@@ -125,7 +117,6 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
             </div>
           </div>
 
-          {/* ISBN */}
           <div className="flex flex-col gap-2 flex-1">
             <label className="block text-sm font-medium text-neutral-600">
               ISBN
@@ -145,7 +136,6 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
 
         </div>
 
-        {/* Availability */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-neutral-600">
             Availability

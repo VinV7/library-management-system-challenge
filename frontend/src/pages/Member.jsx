@@ -4,7 +4,7 @@ import { useState } from "react";
 // Components Import
 import Sidebar from "../components/Sidebar";
 import MemberCatalogPanel from "../components/panels/MemberCatalogPanel";
-import BorrowedBookPanel from "../components/panels/BorrowedBookPanel";
+import BorrowedBooksPanel from "../components/panels/BorrowedBookPanel";
 
 function Member() {
   const [activePanel, setActivePanel] = useState("Catalog");
@@ -27,7 +27,7 @@ function Member() {
           activePanel === "Borrowed Books" ? "flex flex-1 flex-col min-h-0" : "hidden"
         }
       >
-        <BorrowedBookPanel></BorrowedBookPanel>
+        <BorrowedBooksPanel></BorrowedBooksPanel>
       </div>
     </div>
   );
