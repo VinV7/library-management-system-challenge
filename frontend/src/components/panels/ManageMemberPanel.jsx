@@ -62,7 +62,7 @@ function ManageMemberPanel() {
     return (
       <div className="flex flex-1 w-full p-5 min-h-0 bg-[#f8f8f3]">
         <div className="flex w-full h-full bg-white rounded-xl shadow-xl border border-neutral-200 justify-center items-center">
-          <span className="text-2xl text-neutral-400">No Member Found</span>fdhsahhdahll
+          <span className="text-2xl text-neutral-400">No Member Found</span>
         </div>
       </div>
     );
