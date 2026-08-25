@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import MasterLibrary from './pages/MasterLibrary'
 import Librarian from './pages/Librarian'
 import Member from './pages/Member'
+import Books from './pages/Books'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path='/master-library' element={<MasterLibrary/>}></Route>
       <Route path='/librarian' element={<Librarian/>}></Route>
       <Route path='/member' element={<Member/>}></Route>
+      <Route path='/books' element={<Books/>}></Route>
     </Routes>
   )
 }
