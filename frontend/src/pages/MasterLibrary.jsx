@@ -6,6 +6,7 @@ import Sidebar from "../components/Sidebar";
 import CatalogPanel from "../components/panels/CatalogPanel";
 import AddBookPanel from "../components/panels/AddBookPanel";
 import ManageMemberPanel from "../components/panels/ManageMemberPanel";
+import ManageLibrarianPanel from "../components/panels/ManageLibrarianPanel";
 
 function MasterLibrary() {
   const [activePanel, setActivePanel] = useState("Catalog");
@@ -42,6 +43,13 @@ function MasterLibrary() {
         }
       >
         <ManageMemberPanel></ManageMemberPanel>
+      </div>
+      <div
+        className={
+          activePanel === "Manage Librarian" ? "flex flex-1 flex-col min-h-0" : "hidden"
+        }
+      >
+        <ManageLibrarianPanel></ManageLibrarianPanel>
       </div>
     </div>
   );

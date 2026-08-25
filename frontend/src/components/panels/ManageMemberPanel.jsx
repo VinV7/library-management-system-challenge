@@ -72,7 +72,7 @@ function ManageMemberPanel() {
     <div className="flex flex-1 w-full p-5 min-h-0 bg-[#f8f8f3]">
       <div className="flex flex-col w-full h-full bg-white rounded-xl shadow-xl border border-neutral-200 overflow-hidden">
         <div className="px-6 py-5 border-b border-neutral-200">
-          <h2 className="text-xl font-semibold text-neutral-800">
+          <h2 className="">
             Manage Members
           </h2>
           <p className="text-sm text-neutral-400 mt-1">
