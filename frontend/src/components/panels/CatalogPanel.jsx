@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // Components import
-import BookCard from "../BookCard";
+import BookCard from "../EditBookCard";
 import BookEditSidePanel from "../BookEditSidePanel";
 
 const books = [
