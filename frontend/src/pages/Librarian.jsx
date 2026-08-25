@@ -10,7 +10,7 @@ function Librarian() {
   const [activePanel, setActivePanel] = useState("Catalog");
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-y-hidden">
       <Sidebar
         buttons={[
           { key: "Catalog" },
