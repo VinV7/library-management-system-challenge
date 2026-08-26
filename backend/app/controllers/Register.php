@@ -1,9 +1,12 @@
 <?php 
 
+namespace App\Controller;
+
 use App\Models\Registry;
 use App\Core\Session;
 use Ramsey\Uuid\Uuid;
 use App\Models\Session as SessionModel;
+use Exception;
 
 class Register
 {
