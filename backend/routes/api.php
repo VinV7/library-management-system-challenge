@@ -1,5 +1,5 @@
 <?php 
 
-use App\Controller\Register;
+use App\Controllers\Register;
 
-$router->post('api/register', [Register::class, 'register']);
+$router->post('/api/register', [Register::class, 'register']);

@@ -29,7 +29,7 @@ class Registry
         $sql = "
             INSERT INTO users (
                 email,
-                username,
+                name,
                 password,
                 role
             )

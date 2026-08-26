@@ -1,9 +1,9 @@
 <?php 
 
-namespace App\Controller;
+namespace App\Controllers;
 
 use App\Models\Registry;
-use App\Core\Session;
+use App\Core\Session as SessionCookie;
 use Ramsey\Uuid\Uuid;
 use App\Models\Session as SessionModel;
 use Exception;
@@ -44,7 +44,7 @@ class Register
 
             $uuid = Uuid::uuid4();
 
-            Session::get($uuid->toString());
+            SessionCookie::get($uuid->toString());
 
             SessionModel::saveSession($uuid->toString(), $registryData);
             
