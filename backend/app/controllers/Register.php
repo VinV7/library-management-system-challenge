@@ -1,8 +1,12 @@
 <?php 
 
+namespace App\Controller;
+
 use App\Models\Registry;
 use App\Core\Session;
 use Ramsey\Uuid\Uuid;
+use App\Models\Session as SessionModel;
+use Exception;
 
 class Register
 {
@@ -36,11 +40,13 @@ class Register
                 throw new Exception("Email already exists", 409);
             }
 
-            Registry::registerUser($clean_email, $username, $hashed_password);
+            $registryData = Registry::registerUser($clean_email, $username, $hashed_password);
 
             $uuid = Uuid::uuid4();
 
             Session::get($uuid->toString());
+
+            SessionModel::saveSession($uuid->toString(), $registryData);
             
             http_response_code(200);
             echo json_encode([

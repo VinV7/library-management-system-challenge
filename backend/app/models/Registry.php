@@ -7,11 +7,11 @@ use PDO;
 
 class Registry
 {
-    public static function checkUser(string $email): array
+    public static function checkUser(string $email): array|bool
     {
         $db = Database::connection();
 
-        $sql = "SELECT FROM users WHERE email = :email";
+        $sql = "SELECT * FROM users WHERE email = :email";
 
         $stmt = $db->prepare($sql);
 
@@ -22,7 +22,7 @@ class Registry
         return $stmt->fetch();
     }
 
-    public static function registerUser(string $email, string $username, string $password): void
+    public static function registerUser(string $email, string $username, string $password): int
     {
         $db = Database::connection();
 
@@ -49,5 +49,7 @@ class Registry
             "password" => $password,
             "role" => "Member"
         ]);
+
+        return (int) $db->lastInsertId();
     }
 }
