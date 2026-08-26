@@ -7,11 +7,11 @@ use PDO;
 
 class Registry
 {
-    public static function checkUser(string $email): array
+    public static function checkUser(string $email): array|bool
     {
         $db = Database::connection();
 
-        $sql = "SELECT FROM users WHERE email = :email";
+        $sql = "SELECT * FROM users WHERE email = :email";
 
         $stmt = $db->prepare($sql);
 
