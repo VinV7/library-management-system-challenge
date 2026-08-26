@@ -1,6 +1,8 @@
 <?php 
 
 use App\Models\Registry;
+use App\Core\Session;
+use Ramsey\Uuid\Uuid;
 
 class Register
 {
@@ -35,6 +37,10 @@ class Register
             }
 
             Registry::registerUser($clean_email, $username, $hashed_password);
+
+            $uuid = Uuid::uuid4();
+
+            Session::get($uuid->toString());
             
             http_response_code(200);
             echo json_encode([
