@@ -1,5 +1,7 @@
 <?php 
 
+use App\Models\Registry;
+
 class Register
 {
     public function register()
@@ -28,11 +30,21 @@ class Register
 
             $hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 13]);
 
-            Registry::checkUser();
-            Registry::registerUser();
-            
+            if (Registry::checkUser($clean_email)) {
+                throw new Exception("Email already exists", 409);
+            }
 
+            Registry::registerUser($clean_email, $username, $hashed_password);
+            
+            http_response_code(200);
+            echo json_encode([
+                "success" => true,
+                "message" => "Account Successfully Created",
+                "code" => 200
+            ]);
         } catch (Exception $e) {
+            http_response_code(400);
+
             echo json_encode([
                 "success" => false,
                 "message" => $e->getMessage(),
