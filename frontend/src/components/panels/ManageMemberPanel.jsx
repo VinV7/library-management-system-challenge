@@ -1,64 +1,34 @@
-const memberList = [
-  {
-    id: 1,
-    name: "John Doe",
-    created_at: "2026-08-20",
-    borrowed_books: 2,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    created_at: "2026-08-21",
-    borrowed_books: 5,
-  },
-  {
-    id: 3,
-    name: "Michael Brown",
-    created_at: "2026-08-22",
-    borrowed_books: 0,
-  },
-  {
-    id: 1,
-    name: "John Doe",
-    created_at: "2026-08-20",
-    borrowed_books: 2,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    created_at: "2026-08-21",
-    borrowed_books: 5,
-  },
-  {
-    id: 3,
-    name: "Michael Brown",
-    created_at: "2026-08-22",
-    borrowed_books: 0,
-  },
-  {
-    id: 1,
-    name: "John Doe",
-    created_at: "2026-08-20",
-    borrowed_books: 2,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    created_at: "2026-08-21",
-    borrowed_books: 5,
-  },
-  {
-    id: 3,
-    name: "Michael Brown",
-    created_at: "2026-08-22",
-    borrowed_books: 0,
-  },
-];
+// Main Import
+import { useState } from "react";
 
-function ManageMemberPanel() {
+// Services
+import delete_user from "../../services/delete_user";
+
+function ManageMemberPanel({ members, onDelete }) {
   // Variable Components
+  const [deleteError, setDeleteError] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
 
-  if (!memberList || memberList.length === 0) {
+  const handleDelete = async (id) => {
+    setDeleteError("");
+    setDeletingId(id);
+
+    try {
+      await delete_user({ id });
+      onDelete?.(id);
+    } catch (err) {
+      console.log(err);
+      setDeleteError(
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to delete member. Please try again."
+      );
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  if (!members || members.length === 0) {
     return (
       <div className="flex flex-1 w-full p-5 min-h-0 bg-[#f8f8f3]">
         <div className="flex w-full h-full bg-white rounded-xl shadow-xl border border-neutral-200 justify-center items-center">
@@ -76,9 +46,15 @@ function ManageMemberPanel() {
             Manage Members
           </h2>
           <p className="text-sm text-neutral-400 mt-1">
-            {memberList.length} member{memberList.length !== 1 ? "s" : ""}
+            {members.length} member{members.length !== 1 ? "s" : ""}
           </p>
         </div>
+
+        {deleteError && (
+          <div className="mx-6 mt-4 flex items-start gap-2 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
+            <span>{deleteError}</span>
+          </div>
+        )}
 
         <div className="flex-1 overflow-auto">
           <table className="w-full border-collapse">
@@ -86,14 +62,13 @@ function ManageMemberPanel() {
               <tr className="text-left text-sm text-neutral-500">
                 <th className="px-6 py-4 font-medium">ID</th>
                 <th className="px-6 py-4 font-medium">Name</th>
-                <th className="px-6 py-4 font-medium">Date Created</th>
-                <th className="px-6 py-4 font-medium">Books Borrowed</th>
+                <th className="px-6 py-4 font-medium">Email</th>
                 <th className="px-6 py-4 font-medium text-right">Action</th>
               </tr>
             </thead>
 
             <tbody>
-              {memberList.map((member) => (
+              {members.map((member) => (
                 <tr
                   key={member.id}
                   className="border-b border-neutral-100 hover:bg-neutral-50 transition"
@@ -110,15 +85,9 @@ function ManageMemberPanel() {
                     </span>
                   </td>
 
-                  {/* Date Created */}
-                  <td className="px-6 py-4 text-sm text-neutral-500">
-                    {member.created_at}
-                  </td>
-
-                  {/* Books Borrowed */}
                   <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-neutral-100 text-sm text-neutral-700">
-                      {member.borrowed_books}
+                    <span className="font-medium text-neutral-800">
+                      {member.email}
                     </span>
                   </td>
 
@@ -126,10 +95,11 @@ function ManageMemberPanel() {
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"
-                      className="px-4 py-2 rounded-lg bg-red-50 text-red-600 text-sm font-medium hover:bg-red-100 transition"
-                      onClick={() => console.log("Delete:", member.id)}
+                      disabled={deletingId === member.id}
+                      className="px-4 py-2 rounded-lg bg-red-50 text-red-600 text-sm font-medium hover:bg-red-100 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                      onClick={() => handleDelete(member.id)}
                     >
-                      Delete
+                      {deletingId === member.id ? "Deleting..." : "Delete"}
                     </button>
                   </td>
                 </tr>

@@ -51,4 +51,25 @@ class Session
 
         return $role;
     }
+
+    public static function checkSessionUserID(string $sessionID): ?int
+    {
+        $db = Database::connection();
+
+        $sql = "
+            SELECT user_id
+            FROM session
+            WHERE session_id = :sessionID
+        ";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->execute([
+            'sessionID' => $sessionID
+        ]);
+
+        $userID = $stmt->fetchColumn();
+
+        return $userID !== false ? (int) $userID : null;
+    }
 }

@@ -1,55 +1,25 @@
-const borrowedBooks = [
-  {
-    lending_id: 1001,
-    book_title: "The Lord of the Rings",
-    status: "Borrowed",
-    fines: 0,
-    borrow_date: "2026-08-20",
-    due_date: "2026-09-03",
-  },
-  {
-    lending_id: 1002,
-    book_title: "Clean Code",
-    status: "Overdue",
-    fines: 15000,
-    borrow_date: "2026-08-10",
-    due_date: "2026-08-24",
-  },
-  {
-    lending_id: 1003,
-    book_title: "The Pragmatic Programmer",
-    status: "Borrowed",
-    fines: 0,
-    borrow_date: "2026-08-21",
-    due_date: "2026-09-04",
-  },
-  {
-    lending_id: 1004,
-    book_title: "Harry Potter and the Philosopher's Stone",
-    status: "Overdue",
-    fines: 25000,
-    borrow_date: "2026-08-05",
-    due_date: "2026-08-19",
-  },
-  {
-    lending_id: 1005,
-    book_title: "Atomic Habits",
-    status: "Borrowed",
-    fines: 0,
-    borrow_date: "2026-08-22",
-    due_date: "2026-09-05",
-  },
-  {
-    lending_id: 1006,
-    book_title: "The Great Gatsby",
-    status: "Borrowed",
-    fines: 0,
-    borrow_date: "2026-08-23",
-    due_date: "2026-09-06",
-  },
-];
+// Services
+import return_book from "../../services/return_book";
 
-function BorrowedBooksPanel() {
+function BorrowedBooksPanel({ borrowedBooks }) {
+
+  const handleReturn = async (book) => {
+    try {
+      const result = await return_book({
+        lending_id: book.id,
+      });
+
+      console.log("Return successful:", result);
+
+      // You should refresh the borrowed books after this.
+      // For now:
+      console.log(`Book "${book.title}" returned successfully`);
+
+    } catch (err) {
+      console.error("Failed to return book:", err);
+    }
+  };
+
   if (!borrowedBooks || borrowedBooks.length === 0) {
     return (
       <div className="flex flex-1 w-full p-5 min-h-0 bg-[#f8f8f3]">
@@ -66,7 +36,6 @@ function BorrowedBooksPanel() {
     <div className="flex flex-1 w-full p-5 min-h-0 bg-[#f8f8f3]">
       <div className="flex flex-col w-full h-full bg-white rounded-xl shadow-xl border border-neutral-200 overflow-hidden">
 
-        {/* Header */}
         <div className="px-6 py-5 border-b border-neutral-200">
           <h2 className="text-xl font-semibold text-neutral-800">
             Borrowed Books
@@ -78,11 +47,9 @@ function BorrowedBooksPanel() {
           </p>
         </div>
 
-        {/* Table */}
         <div className="flex-1 overflow-auto">
           <table className="w-full border-collapse">
 
-            {/* Table Header */}
             <thead className="sticky top-0 bg-neutral-50 border-b border-neutral-200">
               <tr className="text-left text-sm text-neutral-500">
 
@@ -117,37 +84,31 @@ function BorrowedBooksPanel() {
               </tr>
             </thead>
 
-            {/* Table Body */}
             <tbody>
               {borrowedBooks.map((book) => (
                 <tr
-                  key={book.lending_id}
+                  key={book.id}
                   className="border-b border-neutral-100 hover:bg-neutral-50 transition"
                 >
 
-                  {/* Lending ID */}
                   <td className="px-6 py-4 text-sm text-neutral-500">
-                    #{book.lending_id}
+                    #{book.id}
                   </td>
 
-                  {/* Book Title */}
                   <td className="px-6 py-4">
                     <span className="font-medium text-neutral-800">
-                      {book.book_title}
+                      {book.title}
                     </span>
                   </td>
 
-                  {/* Borrow Date */}
                   <td className="px-6 py-4 text-sm text-neutral-500">
-                    {book.borrow_date}
+                    {book.date_borrowed}
                   </td>
 
-                  {/* Return Date */}
                   <td className="px-6 py-4 text-sm text-neutral-500">
                     {book.due_date ?? "-"}
                   </td>
 
-                  {/* Status */}
                   <td className="px-6 py-4">
                     <span
                       className={`
@@ -169,7 +130,6 @@ function BorrowedBooksPanel() {
                     </span>
                   </td>
 
-                  {/* Fines */}
                   <td className="px-6 py-4">
                     <span
                       className={
@@ -182,7 +142,6 @@ function BorrowedBooksPanel() {
                     </span>
                   </td>
 
-                  {/* Return */}
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"
@@ -197,9 +156,7 @@ function BorrowedBooksPanel() {
                         hover:bg-neutral-700
                         transition
                       "
-                      onClick={() =>
-                        console.log("Return:", book.lending_id)
-                      }
+                      onClick={() => handleReturn(book)}
                     >
                       Return
                     </button>

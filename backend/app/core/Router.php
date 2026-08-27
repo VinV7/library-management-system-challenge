@@ -42,4 +42,4 @@ class Router
 
         echo $instance->$action();
     }
-} 
+}

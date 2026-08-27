@@ -1,3 +1,5 @@
+// BookEditSidePanel.jsx
+
 // Main Imports
 import { useState, useEffect } from "react";
 
@@ -8,19 +10,12 @@ import Genre from "./Genre";
 // File Imports
 import no_image_found from "../assets/no_img_available.png";
 
-// const books = {
-//   title: "The Lord of the Rings",
-//   isbn: "9780544003415",
-//   book_categories: ["Fantasy", "Adventure", "Epic"],
-//   stock: 12,
-//   availability: true,
-//   release_date: "1954-07-29",
-//   img_link: "https://m.media-amazon.com/images/I/51t0Z0DfEfL._SY425_.jpg",
-// };
+// Service
+import update_book from "../services/update_book";
 
-const genresss = ["Sci-Fi", "Adventure", "Fantasy", "Epic", "Shounen"];
+const genresss = ['Sci-Fi', 'Computer', 'Fantasy', 'Science', 'Adventure'];
 
-function BookEditSidePanel({ panelOpen, setPanelOpen, bookData }) {
+function BookEditSidePanel({ panelOpen, setPanelOpen, bookData, onUpdated }) {
   // Variable useStates
   const [title, setTitle] = useState("");
   const [isbn, setIsbn] = useState("");
@@ -34,19 +29,53 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData }) {
   // Functional useStates
   const [addGenreBtn, setAddGenreBtn] = useState(false);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setTitle(bookData?.title || "");
     setIsbn(bookData?.isbn || "");
     setStock(bookData?.stock || 0);
-    setAvailability(bookData?.availability || false);
+    setAvailability(Boolean(bookData?.availability));
     setReleaseDate(bookData?.release_date || "");
     setAuthor(bookData?.author || "");
-    setGenres(bookData?.book_categories || []);
-    setImgLink(bookData?.img_link || "");
+    setGenres(bookData?.categories || []);
+    setImgLink(bookData?.image_link || "");
+    setError("");
   }, [bookData]);
 
   if (!bookData) return null;
+
+  const removeGenre = (genre) => {
+    setGenres(genres.filter((g) => g !== genre));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSaving(true);
+
+    try {
+      const updated = await update_book({
+        id: bookData.id,
+        title: title,
+        isbn: isbn,
+        stock: Number(stock),
+        availability: availability ? 1 : 0,
+        release_date: releaseDate,
+        author: author,
+        categories: genres,
+        image_link: imgLink,
+      });
+
+      onUpdated?.(updated.book ?? updated);
+      setPanelOpen();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to update book");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div
@@ -104,7 +133,7 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData }) {
       </div>
 
       <div className="w-full mt-7">
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <label className="block text-sm font-medium text-neutral-600">
               Title
@@ -137,7 +166,7 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData }) {
               "
             >
               {genres.map((genre) => (
-                <Genre key={genre} text={genre} />
+                <Genre key={genre} text={genre} onRemove={() => removeGenre(genre)} />
               ))}
               <div className="flex flex-col justify-center">
                 <div
@@ -211,8 +240,9 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData }) {
                 Author
               </label>
               <input
-                type="Text"
-                value="This Author"
+                type="text"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
                 className="
                   w-full h-12 px-3
                   bg-white border border-neutral-200 rounded-xl
@@ -234,7 +264,7 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData }) {
                 type="number"
                 value={stock}
                 onChange={(e) => setStock(e.target.value)}
-                min={1}
+                min={0}
                 className="
                   w-16 h-12 px-3
                   bg-white border border-neutral-200 rounded-xl
@@ -299,7 +329,13 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData }) {
             </div>
           </div>
           <div className="flex flex-col justify-center items-center gap-2">
-            <button type="button" className="w-full h-15 text-2xl font-medium text-white bg-orange-400 hover:bg-orange-500 cursor-pointer">Update</button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="w-full h-15 text-2xl font-medium text-white bg-orange-400 hover:bg-orange-500 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {saving ? "Updating..." : "Update"}
+            </button>
             <span className="text-md font-extralight text-red-500">{error}</span>
           </div>
         </form>

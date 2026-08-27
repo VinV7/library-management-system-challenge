@@ -1,6 +1,9 @@
 // Components Import
 import { InfoIcon } from "./SVGs";
 
+// Services 
+import borrow_book from "../services/borrow_book";
+
 function BookCard({ imgLink, title, onClickBorrow, onClick }) {
   return (
     <div className="flex flex-col w-48 h-64 rounded-lg border border-neutral-100 shadow-sm bg-white overflow-hidden hover:shadow-md transition-shadow duration-300">

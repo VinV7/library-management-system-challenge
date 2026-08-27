@@ -1,5 +1,9 @@
 // File Imports
+import { useEffect, useState } from "react";
 import logo from "../assets/library_logo.png";
+
+// Service
+import get_books from "../services/get_books";
 
 const books = [
   {
@@ -186,6 +190,26 @@ const books = [
 ];
 
 function Books() {
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchBooks() {
+      try {
+        const data = await get_books();
+        setBooks(data);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to load books");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBooks();
+  }, []);
+
   return (
     <div className="min-h-screen bg-taupe-50">
       <nav className="flex w-full h-24 px-16 bg-taupe-800 justify-between items-center shadow-sm border-b border-taupe-700/50">
@@ -229,7 +253,7 @@ function Books() {
           >
             <div className="flex w-full h-44 items-center justify-center bg-taupe-50 px-4 py-3">
               <img
-                src={book.img_link}
+                src={book.image_link}
                 className="h-full w-auto object-contain rounded-md shadow-sm group-hover:scale-105 transition-transform duration-300"
               />
             </div>

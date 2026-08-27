@@ -44,9 +44,58 @@ class Register
 
             $uuid = Uuid::uuid4();
 
-            SessionCookie::get($uuid->toString());
+            SessionCookie::set($uuid->toString());
 
             SessionModel::saveSession($uuid->toString(), $registryData);
+            
+            http_response_code(200);
+            echo json_encode([
+                "success" => true,
+                "message" => "Account Successfully Created",
+                "code" => 200
+            ]);
+        } catch (Exception $e) {
+            http_response_code(400);
+
+            echo json_encode([
+                "success" => false,
+                "message" => $e->getMessage(),
+                "code" => $e->getCode()
+            ]);
+        }
+    }
+
+    public function registerLibrarian()
+    {       
+        $json = file_get_contents("php://input");
+        $data = json_decode($json, true);
+
+        $dirty_email = $data['email'] ?? null;
+        $username = $data['username'] ?? null;
+        $password = $data['password'] ?? null;
+
+        $clean_email = filter_var($dirty_email, FILTER_SANITIZE_EMAIL);
+
+        try {
+            if (!$clean_email || !filter_var($clean_email, FILTER_VALIDATE_EMAIL)) {
+                throw new Exception("Email is invalid or empty", 401);
+            }
+
+            if (!$username) {
+                throw new Exception("Username is empty", 401);
+            }
+
+            if (!$password) {
+                throw new Exception("Password is empty", 401);
+            }
+
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 13]);
+
+            if (Registry::checkUser($clean_email)) {
+                throw new Exception("Email already exists", 409);
+            }
+
+            Registry::registerLibrarian($clean_email, $username, $hashed_password);
             
             http_response_code(200);
             echo json_encode([

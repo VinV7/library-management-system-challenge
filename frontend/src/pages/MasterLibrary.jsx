@@ -1,5 +1,5 @@
 // Main Import
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Components Import
 import Sidebar from "../components/Sidebar";
@@ -8,8 +8,34 @@ import AddBookPanel from "../components/panels/AddBookPanel";
 import ManageMemberPanel from "../components/panels/ManageMemberPanel";
 import ManageLibrarianPanel from "../components/panels/ManageLibrarianPanel";
 
+import master_library_services from "../services/master_library_services";
+
 function MasterLibrary() {
   const [activePanel, setActivePanel] = useState("Catalog");
+  const [books, setBooks] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [librarians, setLibrarians] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchBooks() {
+      try {
+        const data = await master_library_services();
+        setBooks(data.books);
+        setMembers(data.members);
+        setLibrarians(data.librarians);
+        console.log(data)
+      } catch (error) {
+        console.error(error);
+        setError("Failed to load books");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBooks();
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -28,7 +54,7 @@ function MasterLibrary() {
           activePanel === "Catalog" ? "flex flex-1 flex-col min-h-0" : "hidden"
         }
       >
-        <CatalogPanel></CatalogPanel>
+        <CatalogPanel books={books} loading={loading} error={error}></CatalogPanel>
       </div>
       <div
         className={
@@ -42,14 +68,14 @@ function MasterLibrary() {
           activePanel === "Manage Member" ? "flex flex-1 flex-col min-h-0" : "hidden"
         }
       >
-        <ManageMemberPanel></ManageMemberPanel>
+        <ManageMemberPanel members={members}></ManageMemberPanel>
       </div>
       <div
         className={
           activePanel === "Manage Librarian" ? "flex flex-1 flex-col min-h-0" : "hidden"
         }
       >
-        <ManageLibrarianPanel></ManageLibrarianPanel>
+        <ManageLibrarianPanel librarians={librarians}></ManageLibrarianPanel>
       </div>
     </div>
   );

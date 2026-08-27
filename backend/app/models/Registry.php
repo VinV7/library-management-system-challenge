@@ -52,4 +52,35 @@ class Registry
 
         return (int) $db->lastInsertId();
     }
+
+    public static function registerLibrarian(string $email, string $username, string $password): int
+    {
+        $db = Database::connection();
+
+        $sql = "
+            INSERT INTO users (
+                email,
+                name,
+                password,
+                role
+            )
+            VALUES (
+                :email,
+                :username,
+                :password,
+                :role
+            )
+        ";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->execute([
+            "email" => $email,
+            "username" => $username,
+            "password" => $password,
+            "role" => "Librarian"
+        ]);
+
+        return (int) $db->lastInsertId();
+    }
 }

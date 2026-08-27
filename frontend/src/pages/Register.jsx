@@ -1,7 +1,7 @@
 // Main Imports
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import register from "../services/register";
+import register from "../services/register_member";
 
 // File Import
 import logo from "../assets/library_logo.png";
