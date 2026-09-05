@@ -1,22 +1,44 @@
 // Main Imports
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import register from "../services/register_member";
 
 // File Import
 import logo from "../assets/library_logo.png";
 import form_picture from "../assets/women_reading_and_coffee.png";
+
+// Services Import
+import cookie_check_services from "../services/cookie_check_services";
+import register from "../services/register_member";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const check_cookie = async () => {
+      try {
+        const response = await cookie_check_services();
+
+        if (response.cookie === true) {
+          navigate(`/${response.page}`);
+        }
+
+        setPageLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    check_cookie();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +53,7 @@ function Register() {
     };
 
     try {
-      setLoading(true);
+      setRegisterLoading(true);
 
       const data = await register(body);
 
@@ -42,14 +64,22 @@ function Register() {
       setPassword("");
 
       if (data.success) {
-        navigate("/member")
+        navigate("/member");
       }
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      setRegisterLoading(false);
     }
   };
+
+  if (pageLoading === true) {
+    return (
+      <div>
+        Page Loading...
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col h-screen">
@@ -138,10 +168,10 @@ function Register() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={registerLoading}
                 className="mt-2 w-full py-2.5 rounded-lg bg-taupe-800 text-white font-lustria tracking-wide hover:bg-taupe-700 hover:scale-[1.02] transition-all duration-200 shadow-md disabled:opacity-50 disabled:hover:scale-100"
               >
-                {loading ? "Registering..." : "Register"}
+                {registerLoading ? "Registering..." : "Register"}
               </button>
             </form>
 

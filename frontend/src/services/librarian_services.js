@@ -1,6 +1,6 @@
-const API_URL = import.meta.env.VITE_MEMBER_SERVICES_API_URL;
+const API_URL = import.meta.env.VITE_LIBRARIAN_SERVICES_API_URL;
 
-async function member_services() {
+async function librarian_services() {
   const response = await fetch(API_URL, {
     method: "GET",
     credentials: "include",
@@ -9,9 +9,8 @@ async function member_services() {
     },
   });
 
-
   if (!response.ok) {
-    throw new Error("Failed to fetch from server");
+    throw new Error("Failed to fetch books");
   }
 
   const data = await response.json();
@@ -19,4 +18,4 @@ async function member_services() {
   return data;
 }
 
-export default member_services;
+export default librarian_services;

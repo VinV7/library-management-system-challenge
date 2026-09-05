@@ -50,8 +50,6 @@ class Lending
 
         $stmt = $db->prepare($sql);
 
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':fines', $fines);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         $stmt->execute();

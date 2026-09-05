@@ -1,5 +1,6 @@
 // Main Import
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Components Import
 import Sidebar from "../components/Sidebar";
@@ -13,33 +14,34 @@ function Member() {
   const [activePanel, setActivePanel] = useState("Catalog");
   const [books, setBooks] = useState([]);
   const [borrowings, setBorrowings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const [pageLoading, setPageLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchMemberData() {
       try {
         const data = await member_services();
 
+        if (data.cookies !== true) {
+          navigate("/");
+          return;
+        }
+
         setBooks(data.books);
         setBorrowings(data.lendings);
-
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
+        setPageLoading(false);
+      } catch (err) {
+        console.error(err)
+      } 
     }
 
     fetchMemberData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
+  if (pageLoading === true) {
+    return <div>Page Loading...</div>;
   }
 
   return (
@@ -65,7 +67,7 @@ function Member() {
             : "hidden"
         }
       >
-        <BorrowedBooksPanel borrowedBooks={borrowings}/>
+        <BorrowedBooksPanel borrowedBooks={borrowings} />
       </div>
     </div>
   );
