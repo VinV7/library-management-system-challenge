@@ -15,8 +15,6 @@ function Member() {
   const [books, setBooks] = useState([]);
   const [borrowings, setBorrowings] = useState([]);
 
-  const [cookies, setCookies] = useState(false)
-
   const [pageLoading, setPageLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -26,7 +24,7 @@ function Member() {
       try {
         const data = await member_services();
 
-        if (cookies !== true) {
+        if (data.cookies !== true) {
           navigate("/");
           return;
         }
