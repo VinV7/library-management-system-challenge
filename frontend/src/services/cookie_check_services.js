@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_CHECK_COOKIES_API_URL;
 
-async function cookie_check() {
+async function cookie_check_services() {
   const response = await fetch(API_URL, {
     method: "GET",
     credentials: "include",
@@ -9,7 +9,7 @@ async function cookie_check() {
     },
   });
 
-  return response;
+  return response.json();
 }
 
-export default cookie_check;
+export default cookie_check_services;
