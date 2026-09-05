@@ -16,8 +16,6 @@ async function member_services() {
 
   const data = await response.json();
 
-  console.log(data)
-
   return data;
 }
 

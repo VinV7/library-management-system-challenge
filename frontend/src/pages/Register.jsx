@@ -1,7 +1,6 @@
 // Main Imports
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import register from "../services/register_member";
 
 // File Import
 import logo from "../assets/library_logo.png";
@@ -9,6 +8,7 @@ import form_picture from "../assets/women_reading_and_coffee.png";
 
 // Services Import
 import cookie_check_services from "../services/cookie_check_services";
+import register from "../services/register_member";
 
 function Register() {
   const [email, setEmail] = useState("");
