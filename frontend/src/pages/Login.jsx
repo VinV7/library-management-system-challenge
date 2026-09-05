@@ -1,13 +1,14 @@
 // Main Import
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import login from "../services/login";
 
 // Files Import
-
 import logo from "../assets/library_logo.png";
 import form_picture from "../assets/man_reading.png";
+
+// Services Import
+import cookie_check_services from "../services/cookie_check_services";
 
 function Login() {
   const navigate = useNavigate();
@@ -17,8 +18,27 @@ function Login() {
     password: "",
   });
 
+  const [pageLoading, setPageLoading] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const check_cookie = async () => {
+      try {
+        const response = await cookie_check_services();
+
+        if (response.cookie === true) {
+          navigate(`/${response.page}`);
+        }
+
+        setPageLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    check_cookie();
+  }, []);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -59,6 +79,14 @@ function Login() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (pageLoading === true) {
+    return (
+      <div>
+        Page Loading...
+      </div>
+    )
   }
 
   return (
