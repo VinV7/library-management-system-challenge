@@ -1,5 +1,6 @@
 // Main Import
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Components Import
 import Sidebar from "../components/Sidebar";
@@ -7,19 +8,29 @@ import CatalogPanel from "../components/panels/CatalogPanel";
 import AddBookPanel from "../components/panels/AddBookPanel";
 
 // Services
-import get_books from "../services/get_books";
+import librarian_services from "../services/librarian_services";
 
 function Librarian() {
-  const [activePanel, setActivePanel] = useState("Catalog");
   const [books, setBooks] = useState([]);
+
+  const [activePanel, setActivePanel] = useState("Catalog");
+  const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    async function fetchBooks() {
+    async function fetchDatas() {
       try {
-        const data = await get_books();
-        setBooks(data);
+        const data = await librarian_services();
+
+        if (data.cookies !== true) {
+          navigate("/")
+        }
+
+        setBooks(data.books);
+        setPageLoading(false);
       } catch (error) {
         console.error(error);
         setError("Failed to load books");
@@ -28,8 +39,16 @@ function Librarian() {
       }
     }
 
-    fetchBooks();
+    fetchDatas();
   }, []);
+
+  if (pageLoading === true) {
+    return (
+      <div>
+        Page Loading...
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-screen overflow-y-hidden">
