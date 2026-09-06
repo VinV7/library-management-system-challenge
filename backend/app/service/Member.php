@@ -7,6 +7,7 @@ use App\Core\Session;
 use App\Controllers\CheckBorrowing;
 use App\Models\Session as SessionModels;
 use App\Controllers\VerifyCookie;
+use App\Controllers\CheckBookAvailability;
 use App\Models\Lending;
 use Ramsey\Uuid\Uuid;
 use Exception;
@@ -87,6 +88,19 @@ class Member
                 "success" => false,
                 "message" => "Forbidden: Only members can borrow books."
             ]);
+            return;
+        }
+
+        $book_availability = CheckBookAvailability::check($bookID);
+
+        if ($book_availability['availability'] === 0 || $book_availability['stock'] === 0) {
+            http_response_code(409);
+
+            echo json_encode([
+                'success' => false,
+                'message' => 'Book is currently unavailable.'
+            ]);
+
             return;
         }
 

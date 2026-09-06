@@ -185,4 +185,21 @@ class Books
             self::addGenre($id, $categoryID, $bookID);
         }
     }
+
+    public static function checkBookAvailability(string $id)
+    {
+        $db = Database::connection();
+
+        $sql = "
+            SELECT stock, availability
+            FROM books
+            WHERE id = :id
+        ";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
