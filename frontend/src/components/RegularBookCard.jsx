@@ -1,10 +1,9 @@
 // Components Import
 import { InfoIcon } from "./SVGs";
 
-// Services 
-import borrow_book from "../services/borrow_book";
+function BookCard({ imgLink, title, onClickBorrow, onClick, availability, stock }) {
+  const isAvailable = Boolean(availability) && (stock === undefined || stock > 0);
 
-function BookCard({ imgLink, title, onClickBorrow, onClick }) {
   return (
     <div className="flex flex-col w-48 h-64 rounded-lg border border-neutral-100 shadow-sm bg-white overflow-hidden hover:shadow-md transition-shadow duration-300">
       <div className="flex w-full h-40 items-center justify-center bg-neutral-50 px-4 py-2">
@@ -21,8 +20,16 @@ function BookCard({ imgLink, title, onClickBorrow, onClick }) {
         <div className="flex mt-2 gap-3 items-center">
           <button
             type="button"
-            className="self-start w-full px-3 py-1.5 rounded-md bg-green-400 text-white text-xs font-medium hover:bg-green-500 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
-            onClick={onClickBorrow}
+            disabled={!isAvailable}
+            className={`
+              self-start w-full px-3 py-1.5 rounded-md text-xs font-medium
+              transition-all duration-200 shadow-sm
+              ${isAvailable
+                ? "bg-green-400 text-white hover:bg-green-500 active:scale-95 cursor-pointer"
+                : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
+              }
+            `}
+            onClick={isAvailable ? onClickBorrow : undefined}
           >
             Borrow
           </button>

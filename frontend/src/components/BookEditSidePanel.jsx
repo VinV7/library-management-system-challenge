@@ -12,10 +12,12 @@ import no_image_found from "../assets/no_img_available.png";
 
 // Service
 import update_book from "../services/update_book";
+import delete_book from "../services/delete_book";
+
 
 const genresss = ['Sci-Fi', 'Computer', 'Fantasy', 'Science', 'Adventure'];
 
-function BookEditSidePanel({ panelOpen, setPanelOpen, bookData, onUpdated }) {
+function BookEditSidePanel({ panelOpen, setPanelOpen, bookData, onUpdated, onDeleted }) {
   // Variable useStates
   const [title, setTitle] = useState("");
   const [isbn, setIsbn] = useState("");
@@ -30,6 +32,7 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData, onUpdated }) {
   const [addGenreBtn, setAddGenreBtn] = useState(false);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     setTitle(bookData?.title || "");
@@ -74,6 +77,22 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData, onUpdated }) {
       setError(err.message || "Failed to update book");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setError("");
+    setDeleting(true);
+
+    try {
+      await delete_book({ id: bookData.id });
+      onDeleted?.(bookData.id);
+      setPanelOpen();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to delete book");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -331,11 +350,21 @@ function BookEditSidePanel({ panelOpen, setPanelOpen, bookData, onUpdated }) {
           <div className="flex flex-col justify-center items-center gap-2">
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || deleting}
               className="w-full h-15 text-2xl font-medium text-white bg-orange-400 hover:bg-orange-500 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {saving ? "Updating..." : "Update"}
             </button>
+
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={saving || deleting}
+              className="w-full h-12 text-lg font-medium text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            >
+              {deleting ? "Deleting..." : "Delete Book"}
+            </button>
+
             <span className="text-md font-extralight text-red-500">{error}</span>
           </div>
         </form>

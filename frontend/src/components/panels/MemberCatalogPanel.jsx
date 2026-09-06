@@ -46,9 +46,9 @@ function MemberCatalogPanel({ books }) {
             key={book.id}
             title={book.title}
             imgLink={book.image_link}
-
+            availability={book.availability}
+            stock={book.stock}
             onClickBorrow={() => onClickBorrow(book)}
-
             onClick={() => onClickInfo(book)}
           />
         ))}

@@ -3,11 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\Books as BookModel;
+use App\Models\Lending;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 class Book
 {
-    public static function AddBook()
+
+    public static function AddBook(): void
     {
         header('Content-Type: application/json');
 
@@ -54,7 +57,10 @@ class Book
                 }
             }
 
-            $bookID = BookModel::addBook(
+            $bookID = Uuid::uuid4()->toString();
+
+            BookModel::addBook(
+                $bookID,
                 $title,
                 $author,
                 (int) $isbn,
@@ -67,13 +73,19 @@ class Book
             foreach ($genres as $genre) {
                 $categoryID = BookModel::checkGenre($genre);
 
-                if (!$categoryID) {
-                    throw new Exception("Genre does not exist in categories: " . $genre);
+                if ($categoryID === null) {
+                    throw new Exception(
+                        "Genre does not exist in categories: " . $genre
+                    );
                 }
 
+
+                $genreID = Uuid::uuid4()->toString();
+
                 BookModel::addGenre(
-                    (int) $categoryID,
-                    (int) $bookID
+                    $genreID,
+                    $categoryID,
+                    $bookID
                 );
             }
 
@@ -94,6 +106,7 @@ class Book
             ]);
         }
     }
+
 
     public static function getBooks() 
     {
@@ -186,7 +199,7 @@ class Book
             );
 
             BookModel::updateGenres(
-                (int) $bookID,
+                $bookID,
                 $genres
             );
 
@@ -205,5 +218,51 @@ class Book
                 'message' => $e->getMessage()
             ]);
         }
-}
+    }
+
+    public static function deleteBook(): void
+    {
+        header('Content-Type: application/json');
+
+        $json = file_get_contents("php://input");
+        $data = json_decode($json, true);
+
+        try {
+            $bookID = $data['id'] ?? null;
+
+            if (!$bookID) {
+                throw new Exception("Deletion requires book ID");
+            }
+
+            $checkLending = Lending::getLendingByBookID($bookID);
+
+            if ($checkLending !== null) {
+                http_response_code(409);
+
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Cannot delete book because it is currently being borrowed'
+                ]);
+
+                return;
+            }
+
+            BookModel::deleteBook($bookID);
+
+            http_response_code(200);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Book deleted successfully'
+            ]);
+
+        } catch (Exception $e) {
+            http_response_code(500);
+
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }

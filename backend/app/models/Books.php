@@ -3,6 +3,7 @@
 namespace App\Models; 
 
 use App\Core\Database;
+use Ramsey\Uuid\Uuid;
 use PDO;
 
 class Books 
@@ -103,7 +104,7 @@ class Books
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getBookCategory(int $bookID) {
+    public static function getBookCategory(string $bookID) {
         $db = Database::connection();
 
         $sql = "
@@ -115,7 +116,7 @@ class Books
         ";
 
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_INT);
+        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -161,7 +162,7 @@ class Books
         $stmt->execute();
     }
 
-    public static function updateGenres(string $id, string $bookID, array $genres): void
+    public static function updateGenres(string $bookID, array $genres): void
     {
         $db = Database::connection();
 
@@ -174,7 +175,6 @@ class Books
         $stmt->bindParam(':book_id', $bookID, PDO::PARAM_STR);
         $stmt->execute();
 
-
         foreach ($genres as $genre) {
             $categoryID = self::checkGenre($genre);
 
@@ -182,7 +182,42 @@ class Books
                 continue;
             }
 
+            $id = Uuid::uuid4()->toString();
+
             self::addGenre($id, $categoryID, $bookID);
         }
+    }
+
+    public static function checkBookAvailability(string $id)
+    {
+        $db = Database::connection();
+
+        $sql = "
+            SELECT stock, availability
+            FROM books
+            WHERE id = :id
+        ";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function deleteBook(string $id) 
+    {
+        $db = Database::connection();
+
+        $sql = "
+            DELETE FROM books 
+            WHERE id = :id
+        ";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->execute([
+            'id' => $id
+        ]);
     }
 }

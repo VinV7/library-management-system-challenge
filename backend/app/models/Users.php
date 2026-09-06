@@ -44,7 +44,7 @@ class Users
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function deleteUser(int $id)
+    public static function deleteUser(string $id)
     {
         $db = Database::connection();
 

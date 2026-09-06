@@ -29,7 +29,7 @@ function MasterLibrary() {
       try {
         const data = await master_library_services();
 
-        if (data.cookies !== true) {
+        if (data.cookie !== true) {
           navigation("/");
           return;
         }

@@ -6,7 +6,7 @@ use App\Models\Lending;
 
 class CheckBorrowing
 {
-    public static function checkAndSend(int $memberId): array|null
+    public static function checkAndSend(string $memberId): array|null
     {
         $lendings = Lending::getLending($memberId);
 
