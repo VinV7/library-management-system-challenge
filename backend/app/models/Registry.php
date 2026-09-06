@@ -22,18 +22,20 @@ class Registry
         return $stmt->fetch();
     }
 
-    public static function registerUser(string $email, string $username, string $password): int
+    public static function registerUser(string $id, string $email, string $username, string $password)
     {
         $db = Database::connection();
 
         $sql = "
             INSERT INTO users (
+                id,
                 email,
                 name,
                 password,
                 role
             )
             VALUES (
+                :id,
                 :email,
                 :username,
                 :password,
@@ -44,27 +46,28 @@ class Registry
         $stmt = $db->prepare($sql);
 
         $stmt->execute([
+            "id" => $id,
             "email" => $email,
             "username" => $username,
             "password" => $password,
             "role" => "Member"
         ]);
-
-        return (int) $db->lastInsertId();
     }
 
-    public static function registerLibrarian(string $email, string $username, string $password): int
+    public static function registerLibrarian(string $id, string $email, string $username, string $password): int
     {
         $db = Database::connection();
 
         $sql = "
             INSERT INTO users (
+                id,
                 email,
                 name,
                 password,
                 role
             )
             VALUES (
+                :id,
                 :email,
                 :username,
                 :password,
@@ -75,6 +78,7 @@ class Registry
         $stmt = $db->prepare($sql);
 
         $stmt->execute([
+            "id" => $id, 
             "email" => $email,
             "username" => $username,
             "password" => $password,

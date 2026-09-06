@@ -7,12 +7,13 @@ use PDO;
 
 class Books 
 {
-    public static function addBook(string $title, string $author, int $isbn, int $stock, string $release_date, string $img_link, bool $availability): int
+    public static function addBook(string $id, string $title, string $author, int $isbn, int $stock, string $release_date, string $img_link, bool $availability): int
     {
         $db = Database::connection();
 
         $sql = "
             INSERT INTO books (
+                id,
                 title,
                 author,
                 isbn,
@@ -22,6 +23,7 @@ class Books
                 availability
             )
             VALUES (
+                :id,
                 :title,
                 :author,
                 :isbn,
@@ -35,6 +37,7 @@ class Books
         $stmt = $db->prepare($sql);
 
         $stmt->execute([
+            'id'            => $id,
             ':title'        => $title,
             ':author'       => $author,
             ':isbn'         => $isbn,
@@ -47,15 +50,17 @@ class Books
         return $db->lastInsertId();
     }
 
-    public static function addGenre(int $categoryID, int $bookID) {
+    public static function addGenre(string $id, string $categoryID, string $bookID) {
         $db = Database::connection();
 
         $sql = "
             INSERT INTO book_categories (
+                id,
                 category_id, 
                 book_id
             ) 
             VALUES (
+                :id,
                 :category_id,
                 :book_id
             )
@@ -63,8 +68,9 @@ class Books
 
         $stmt = $db->prepare($sql);
 
-        $stmt->bindParam(':category_id', $categoryID, PDO::PARAM_INT);
-        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':category_id', $categoryID);
+        $stmt->bindParam(':book_id', $bookID);
 
         $stmt->execute();
     }
@@ -116,7 +122,7 @@ class Books
     }
 
     public static function updateBook(
-        int $bookID,
+        string $bookID,
         string $title,
         string $author,
         int $isbn,
@@ -124,7 +130,8 @@ class Books
         string $release_date,
         string $img_link,
         bool $availability
-    ): void {
+    ): void 
+    {
         $db = Database::connection();
 
         $sql = "
@@ -154,7 +161,7 @@ class Books
         $stmt->execute();
     }
 
-    public static function updateGenres(int $bookID, array $genres): void
+    public static function updateGenres(string $id, string $bookID, array $genres): void
     {
         $db = Database::connection();
 
@@ -164,7 +171,7 @@ class Books
         ";
 
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_INT);
+        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_STR);
         $stmt->execute();
 
 
@@ -175,7 +182,7 @@ class Books
                 continue;
             }
 
-            self::addGenre($categoryID, $bookID);
+            self::addGenre($id, $categoryID, $bookID);
         }
     }
 }

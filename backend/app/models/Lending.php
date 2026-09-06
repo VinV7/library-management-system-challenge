@@ -7,7 +7,7 @@ use PDO;
 
 class Lending 
 {
-    public static function getLending(int $id): array|null
+    public static function getLending(string $id): array|null
     {
         $db = Database::connection();
 
@@ -56,7 +56,8 @@ class Lending
     }
 
     public static function addLending(
-        int $memberID,
+        string $id, 
+        string $memberID,
         string $dateBorrowed,
         string $dueDate
     ): int {
@@ -64,12 +65,14 @@ class Lending
 
         $sql = "
             INSERT INTO lending (
+                id,
                 member_id,
                 date_borrowed,
                 due_date,
                 status,
                 fines
             ) VALUES (
+                :id
                 :memberID,
                 :dateBorrowed,
                 :dueDate,
@@ -81,6 +84,7 @@ class Lending
         $stmt = $db->prepare($sql);
 
         $stmt->execute([
+            'id' => $id, 
             'memberID' => $memberID,
             'dateBorrowed' => $dateBorrowed,
             'dueDate' => $dueDate,
@@ -88,21 +92,24 @@ class Lending
             'fines' => 0
         ]);
 
-        return (int) $db->lastInsertId();
+        return $db->lastInsertId();
     }
 
 
     public static function addLendingBookData(
-        int $lendingID,
-        int $bookID
+        string $id,
+        string $lendingID,
+        string $bookID
     ): void {
         $db = Database::connection();
 
         $sql = "
             INSERT INTO borrowed_books (
+                id,
                 lending_id,
                 book_id
             ) VALUES (
+                :id,
                 :lendingID,
                 :bookID
             )
@@ -111,6 +118,7 @@ class Lending
         $stmt = $db->prepare($sql);
 
         $stmt->execute([
+            'id' => $id,
             'lendingID' => $lendingID,
             'bookID' => $bookID
         ]);
@@ -177,7 +185,7 @@ class Lending
         return $stmt->rowCount() > 0;
     }
 
-    public static function getBookID(int $lendingID): int
+    public static function getBookID(string $lendingID): int
     {
         $db = Database::connection();
 
@@ -199,6 +207,6 @@ class Lending
             throw new \Exception("Book not found for lending ID: $lendingID");
         }
 
-        return (int) $bookID;
+        return $bookID;
     }
 }

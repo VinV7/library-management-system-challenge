@@ -9,7 +9,7 @@ class Session
             'expires' => time() + 86400,
             'path' => '/',
             'httponly' => true,
-            'secure' => true,
+            'secure' => false,
             'samesite' => 'Lax'
         ]);
     }

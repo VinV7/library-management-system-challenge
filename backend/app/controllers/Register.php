@@ -40,13 +40,16 @@ class Register
                 throw new Exception("Email already exists", 409);
             }
 
-            $registryData = Registry::registerUser($clean_email, $username, $hashed_password);
+            $uuid = Uuid::uuid4()->toString();
 
-            $uuid = Uuid::uuid4();
+            Registry::registerUser($uuid, $clean_email, $username, $hashed_password);
 
-            SessionCookie::set($uuid->toString());
+            $session_uid = Uuid::uuid4()->toString();
+            $session_cookie = Uuid::uuid4()->toString();
 
-            SessionModel::saveSession($uuid->toString(), $registryData);
+            SessionCookie::set($session_cookie);
+
+            SessionModel::saveSession($session_uid, $session_cookie, $uuid);
             
             http_response_code(200);
             echo json_encode([
@@ -89,13 +92,15 @@ class Register
                 throw new Exception("Password is empty", 401);
             }
 
-            $hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 13]);
-
             if (Registry::checkUser($clean_email)) {
                 throw new Exception("Email already exists", 409);
             }
 
-            Registry::registerLibrarian($clean_email, $username, $hashed_password);
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 13]);
+
+            $uuid = Uuid::uuid4();
+
+            Registry::registerLibrarian($uuid->toString(), $clean_email, $username, $hashed_password);
             
             http_response_code(200);
             echo json_encode([

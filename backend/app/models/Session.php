@@ -7,16 +7,18 @@ use PDO;
 
 class Session
 {
-    public static function saveSession(string $sessionID, int $userID): void
+    public static function saveSession(string $id, string $sessionID, string $userID): void
     {
         $db = Database::connection();
 
         $sql = "
             INSERT INTO session (
+                id, 
                 session_id,
                 user_id
             )
             VALUES (
+                :id,
                 :sessionID,
                 :userID
             )
@@ -25,6 +27,7 @@ class Session
         $stmt = $db->prepare($sql);
 
         $stmt->execute([
+            "id" => $id,
             "sessionID" => $sessionID,
             "userID" => $userID
         ]);
@@ -52,7 +55,7 @@ class Session
         return $role;
     }
 
-    public static function checkSessionUserID(string $sessionID): ?int
+    public static function checkSessionUserID(string $sessionID): ?string
     {
         $db = Database::connection();
 
@@ -70,6 +73,6 @@ class Session
 
         $userID = $stmt->fetchColumn();
 
-        return $userID !== false ? (int) $userID : null;
+        return $userID !== false ? $userID : null;
     }
 }
