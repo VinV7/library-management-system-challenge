@@ -22,7 +22,7 @@ class Registry
         return $stmt->fetch();
     }
 
-    public static function registerUser(string $id, string $email, string $username, string $password): int
+    public static function registerUser(string $id, string $email, string $username, string $password)
     {
         $db = Database::connection();
 
@@ -52,8 +52,6 @@ class Registry
             "password" => $password,
             "role" => "Member"
         ]);
-
-        return (int) $db->lastInsertId();
     }
 
     public static function registerLibrarian(string $id, string $email, string $username, string $password): int

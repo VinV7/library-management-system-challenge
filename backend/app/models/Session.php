@@ -55,7 +55,7 @@ class Session
         return $role;
     }
 
-    public static function checkSessionUserID(string $sessionID): ?int
+    public static function checkSessionUserID(string $sessionID): ?string
     {
         $db = Database::connection();
 
