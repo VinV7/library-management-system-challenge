@@ -6,11 +6,9 @@ import delete_user from "../../services/delete_user";
 
 function ManageMemberPanel({ members, onDelete }) {
   // Variable Components
-  const [deleteError, setDeleteError] = useState("");
   const [deletingId, setDeletingId] = useState(null);
 
   const handleDelete = async (id) => {
-    setDeleteError("");
     setDeletingId(id);
 
     try {
@@ -18,11 +16,6 @@ function ManageMemberPanel({ members, onDelete }) {
       onDelete?.(id);
     } catch (err) {
       console.log(err);
-      setDeleteError(
-        err?.response?.data?.message ||
-        err?.message ||
-        "Failed to delete member. Please try again."
-      );
     } finally {
       setDeletingId(null);
     }
@@ -49,12 +42,6 @@ function ManageMemberPanel({ members, onDelete }) {
             {members.length} member{members.length !== 1 ? "s" : ""}
           </p>
         </div>
-
-        {deleteError && (
-          <div className="mx-6 mt-4 flex items-start gap-2 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
-            <span>{deleteError}</span>
-          </div>
-        )}
 
         <div className="flex-1 overflow-auto">
           <table className="w-full border-collapse">

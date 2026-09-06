@@ -26,4 +26,4 @@ $router->post('/api/add-book', [Book::class, 'addBook']);
 $router->post('/api/update-books', [Book::class, 'updateBook']);
 $router->post('/api/register/librarian', [Register::class, 'registerLibrarian']);
 
-$router->delete('/api/delete-user', [Users::class, 'deleteUser']);
+$router->delete('/api/delete-user', [MasterLibrary::class, 'deleteUser']);
