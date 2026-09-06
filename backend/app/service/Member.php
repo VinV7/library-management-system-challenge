@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Models\Books;
+use App\Models\Books as BookModel;
 use App\Core\Session;
 use App\Controllers\CheckBorrowing;
 use App\Models\Session as SessionModels;
@@ -24,7 +24,15 @@ class Member
             return;
         }
 
-        $books = Books::getBooks();
+        $books = BookModel::getBooks();
+
+        foreach ($books as &$book) {
+            $book['categories'] = BookModel::getBookCategory(
+                $book['id']
+            );
+        }
+
+        unset($book);
 
         $sessionCookie = Session::get();
 

@@ -24,7 +24,7 @@ function Member() {
       try {
         const data = await member_services();
 
-        if (data.cookies !== true) {
+        if (data.cookie !== true) {
           navigate("/");
           return;
         }

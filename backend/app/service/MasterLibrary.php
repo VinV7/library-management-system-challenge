@@ -29,7 +29,7 @@ class MasterLibrary
 
         foreach ($books as &$book) {
             $book['categories'] = BookModel::getBookCategory(
-                (int) $book['id']
+                $book['id']
             );
         }
 

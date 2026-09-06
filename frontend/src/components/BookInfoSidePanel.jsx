@@ -40,7 +40,7 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
         "
       >
         <img
-          src={bookData.img_link || no_image_found}
+          src={bookData.image_link || no_image_found}
           alt={bookData.title}
           className="w-auto h-[380px] object-contain rounded-md shadow-lg"
         />
@@ -75,7 +75,7 @@ function BookInfoSidePanel({ panelOpen, setPanelOpen, bookData }) {
               bg-white border border-neutral-200 rounded-xl
             "
           >
-            {bookData.book_categories?.map((genre) => (
+            {bookData.categories?.map((genre) => (
               <Genre key={genre} text={genre} />
             ))}
           </div>
