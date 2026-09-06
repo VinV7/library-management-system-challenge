@@ -28,22 +28,62 @@ class VerifyCookie
         $userRole = SessionModel::checkSessionIDRole($sessionCookie);
 
         switch ($userRole) {
-            case 'member':
+            case 'Member':
                 $page = 'member';
                 break;
 
-            case 'librarian':
+            case 'Librarian':
                 $page = 'librarian';
                 break;
 
             case 'Super Admin':
                 $page = 'master-library';
                 break;
+
         }
 
         return [
             'cookie' => true,
             'page' => $page
+        ];
+    }
+
+    public function roleSpecificCookieCheck(string $rolePage): array 
+    {
+        $sessionCookie = Session::get();
+
+        if (!$sessionCookie) {
+            return [
+                'cookie' => false
+            ];
+        }
+
+        $userId = SessionModel::checkSessionUserID($sessionCookie);
+
+        if (!$userId) {
+            return [
+                'cookie' => false
+            ];
+        }
+
+        $userId = SessionModel::checkSessionUserID($sessionCookie);
+
+        if (!$userId) {
+            return [
+                'cookie' => false
+            ];
+        }
+
+        $userRole = SessionModel::checkSessionIDRole($sessionCookie);
+
+        if ($userRole !== $rolePage) {
+            return [
+                'cookie' => false
+            ];
+        }
+
+        return [
+            'cookie' => true
         ];
     }
 }
