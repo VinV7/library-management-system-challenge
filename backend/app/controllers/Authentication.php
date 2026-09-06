@@ -22,7 +22,6 @@ class Authentication
         $password = $data['password'] ?? null;
 
         try {
-            // Basic validation
             if (!$username || !$password) {
                 throw new Exception("Username and password are required", 400);
             }
@@ -37,11 +36,12 @@ class Authentication
                 throw new Exception("Password is incorrect", 401);
             }
 
-            $uuid = Uuid::uuid4();
+            $uuid = Uuid::uuid4()->toString();
+            $session_uid = Uuid::uuid4()->toString();
 
-            SessionCookie::set($uuid->toString());
+            SessionCookie::set($session_uid);
 
-            SessionModel::saveSession($uuid->toString(), $user['id']);
+            SessionModel::saveSession($uuid, $session_uid, $user['id']);
         
             http_response_code(200);
 
