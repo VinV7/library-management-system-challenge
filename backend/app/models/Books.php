@@ -104,7 +104,7 @@ class Books
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getBookCategory(int $bookID) {
+    public static function getBookCategory(string $bookID) {
         $db = Database::connection();
 
         $sql = "
@@ -116,7 +116,7 @@ class Books
         ";
 
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_INT);
+        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -203,5 +203,21 @@ class Books
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function deleteBook(string $id) 
+    {
+        $db = Database::connection();
+
+        $sql = "
+            DELETE FROM books 
+            WHERE id = :id
+        ";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->execute([
+            'id' => $id
+        ]);
     }
 }

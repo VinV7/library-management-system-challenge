@@ -204,4 +204,35 @@ class Lending
 
         return $bookID;
     }
+
+    public static function getLendingByBookID(string $bookID): array|null
+    {
+        $db = Database::connection();
+
+        $sql = "
+            SELECT
+                l.id,
+                b.title,
+                l.date_borrowed,
+                l.due_date,
+                l.status,
+                l.fines
+            FROM lending AS l
+            INNER JOIN borrowed_books AS bb
+                ON bb.lending_id = l.id
+            INNER JOIN books AS b
+                ON b.id = bb.book_id
+            WHERE bb.book_id = :bookID
+        ";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->execute([
+            'bookID' => $bookID
+        ]);
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result ?: null;
+    }
 }

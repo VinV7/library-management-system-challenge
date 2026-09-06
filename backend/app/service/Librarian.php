@@ -13,7 +13,7 @@ class Librarian
         header('Content-Type: application/json');
 
         try {
-            $result = VerifyCookie::roleSpecificCookieCheck("Member");
+            $result = VerifyCookie::roleSpecificCookieCheck("Librarian");
 
             if ($result['cookie'] === false) {
                 echo json_encode([

@@ -184,7 +184,7 @@ function ManageLibrarianPanel({ librarians = [], onDelete }) {
                     </td>
                     <td className="px-6 py-4">
                       <span className="font-medium text-neutral-800">
-                        {librarian.username}
+                        {librarian.name}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-neutral-600">

@@ -24,15 +24,6 @@ function Sidebar({ buttons, activePanel, setActivePanel }) {
           />
         ))}
       </div>
-
-      <div className="px-4 pb-6 pt-4 border-t border-taupe-700/50">
-        <button
-          type="button"
-          className="flex items-center gap-3 w-full h-12 px-4 rounded-lg font-lustria text-base text-taupe-300 transition-all duration-300 ease-out hover:bg-red-500/10 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-400/50"
-        >
-          <span>Logout</span>
-        </button>
-      </div>
     </div>
   );
 }
