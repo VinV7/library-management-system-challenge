@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Session as SessionModels;
 use App\Core\Session;
 use App\Models\Lending;
+use Ramsey\Uuid\Uuid;
 use Exception;
 
 class Borrow
@@ -18,14 +19,22 @@ class Borrow
         $userID = SessionModels::checkSessionUserID(Session::get());
 
         try {
+            $luid = Uuid::uuid4()->toString();
+            $bluid = Uuid::uuid4()->toString();
+
+            Lending::addLending(
+                $luid,
+                $userID,
+                date('Y-m-d'),
+                date('Y-m-d', strtotime('+1 week'))
+            );
+
             Lending::addLendingBookData(
-                Lending::addLending(
-                    $userID,
-                    date('Y-m-d'),
-                    date('Y-m-d', strtotime('+1 week'))
-                ),
+                $bluid,
+                $luid,
                 $bookID
             );
+            
         } catch (Exception $e) {
             http_response_code(500);
 

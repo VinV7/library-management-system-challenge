@@ -18,7 +18,7 @@ $router->get('/api/services/send-data/member', [Member::class, 'sendData']);
 $router->get('/api/services/send-data/librarian', [Librarian::class, 'sendData']);
 $router->get('/api/check-cookies', [Registry::class, 'sendData']);
 
-$router->post('/api/borrow', [Borrow::class, 'borrow']);
+$router->post('/api/borrow', [Member::class, 'borrow']);
 $router->post('/api/return', [ReturnBorrowings::class, 'return']);
 $router->post('/api/register', [Register::class, 'register']);
 $router->post('/api/login', [Authentication::class, 'login']);

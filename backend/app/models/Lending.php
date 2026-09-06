@@ -60,7 +60,7 @@ class Lending
         string $memberID,
         string $dateBorrowed,
         string $dueDate
-    ): int {
+    ) {
         $db = Database::connection();
 
         $sql = "
@@ -72,7 +72,7 @@ class Lending
                 status,
                 fines
             ) VALUES (
-                :id
+                :id,
                 :memberID,
                 :dateBorrowed,
                 :dueDate,
@@ -91,8 +91,6 @@ class Lending
             'status' => 'Borrowed',
             'fines' => 0
         ]);
-
-        return $db->lastInsertId();
     }
 
 
@@ -124,9 +122,7 @@ class Lending
         ]);
     }
 
-
-    // Borrow: decrease stock by 1
-    public static function borrowBook(int $bookID): bool
+    public static function borrowBook(string $bookID): bool
     {
         $db = Database::connection();
 
@@ -147,8 +143,7 @@ class Lending
     }
 
 
-    // Return: increase stock by 1
-    public static function returnBook(int $bookID): bool
+    public static function returnBook(string $bookID): bool
     {
         $db = Database::connection();
 
@@ -167,7 +162,7 @@ class Lending
         return $stmt->rowCount() > 0;
     }
 
-    public static function deleteLendingData($lendingID): bool
+    public static function deleteLendingData(string $lendingID): bool
     {
         $db = Database::connection();
 
