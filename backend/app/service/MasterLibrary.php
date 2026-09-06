@@ -10,7 +10,7 @@ class MasterLibrary
 {
     public static function sendData() 
     {
-        $result = VerifyCookie::roleSpecificCookieCheck("Member");
+        $result = VerifyCookie::roleSpecificCookieCheck("Super Admin");
 
         if ($result['cookie'] === false) {
             echo json_encode([

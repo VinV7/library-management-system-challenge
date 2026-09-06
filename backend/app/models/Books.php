@@ -3,6 +3,7 @@
 namespace App\Models; 
 
 use App\Core\Database;
+use Ramsey\Uuid\Uuid;
 use PDO;
 
 class Books 
@@ -161,7 +162,7 @@ class Books
         $stmt->execute();
     }
 
-    public static function updateGenres(string $id, string $bookID, array $genres): void
+    public static function updateGenres(string $bookID, array $genres): void
     {
         $db = Database::connection();
 
@@ -174,13 +175,14 @@ class Books
         $stmt->bindParam(':book_id', $bookID, PDO::PARAM_STR);
         $stmt->execute();
 
-
         foreach ($genres as $genre) {
             $categoryID = self::checkGenre($genre);
 
             if ($categoryID === null) {
                 continue;
             }
+
+            $id = Uuid::uuid4()->toString();
 
             self::addGenre($id, $categoryID, $bookID);
         }

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Books as BookModel;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 class Book
 {
@@ -186,7 +187,7 @@ class Book
             );
 
             BookModel::updateGenres(
-                (int) $bookID,
+                $bookID,
                 $genres
             );
 
