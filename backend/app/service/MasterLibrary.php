@@ -4,11 +4,24 @@ namespace App\Service;
 
 use App\Controllers\Users;
 use App\Models\Books as BookModel;
+use App\Controllers\VerifyCookie;
 
 class MasterLibrary
 {
     public static function sendData() 
     {
+        $result = VerifyCookie::roleSpecificCookieCheck("Super Admin");
+
+        if ($result['cookie'] === false) {
+            echo json_encode([
+                'success' => true, 
+                'code' => 403,
+                'cookie' => false 
+            ]); 
+
+            return;
+        }
+
         $members = Users::getMembers();
         $librarians = Users::getLibrarians();
 
@@ -26,6 +39,7 @@ class MasterLibrary
         
         echo json_encode([
             'success' => true,
+            'cookie'=> true,
             'books' => $books,
             'members' => $members,
             'librarians' => $librarians

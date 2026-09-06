@@ -48,7 +48,7 @@ class VerifyCookie
         ];
     }
 
-    public function roleSpecificCookieCheck(string $rolePage): array 
+    public static function roleSpecificCookieCheck(string $rolePage): array 
     {
         $sessionCookie = Session::get();
 
@@ -78,6 +78,7 @@ class VerifyCookie
 
         if ($userRole !== $rolePage) {
             return [
+                'role' => $userRole,
                 'cookie' => false
             ];
         }

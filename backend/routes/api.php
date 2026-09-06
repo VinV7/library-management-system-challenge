@@ -10,10 +10,12 @@ use App\Controllers\ReturnBorrowings;
 use App\Service\MasterLibrary;
 use App\Service\Member;
 use App\Service\Registry;
+use App\Service\Librarian;
 
 $router->get('/api/services/send-data/master-library', [MasterLibrary::class, 'sendData']);
 $router->get('/api/get-books', [Book::class, 'getBooks']);
 $router->get('/api/services/send-data/member', [Member::class, 'sendData']);
+$router->get('/api/services/send-data/librarian', [Librarian::class, 'sendData']);
 $router->get('/api/check-cookies', [Registry::class, 'sendData']);
 
 $router->post('/api/borrow', [Borrow::class, 'borrow']);

@@ -25,7 +25,7 @@ function Librarian() {
       try {
         const data = await librarian_services();
 
-        if (data.cookies !== true) {
+        if (data.cookie !== true) {
           navigate("/")
         }
 
