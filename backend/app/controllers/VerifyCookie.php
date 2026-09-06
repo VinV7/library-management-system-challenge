@@ -43,7 +43,6 @@ class VerifyCookie
 
         return [
             'cookie' => true,
-            'role' => $userRole,
             'page' => $page
         ];
     }
