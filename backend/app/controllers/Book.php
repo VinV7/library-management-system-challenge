@@ -188,7 +188,7 @@ class Book
             }
 
             BookModel::updateBook(
-                (int) $bookID,
+                (string) $bookID,
                 (string) $title,
                 (string) $author,
                 (int) $isbn,

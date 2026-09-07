@@ -157,7 +157,7 @@ class Books
         $stmt->bindParam(':release_date', $release_date, PDO::PARAM_STR);
         $stmt->bindParam(':img_link', $img_link, PDO::PARAM_STR);
         $stmt->bindParam(':availability', $availability, PDO::PARAM_BOOL);
-        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_INT);
+        $stmt->bindParam(':book_id', $bookID, PDO::PARAM_STR);
 
         $stmt->execute();
     }
