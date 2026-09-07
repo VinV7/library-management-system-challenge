@@ -180,7 +180,7 @@ class Lending
         return $stmt->rowCount() > 0;
     }
 
-    public static function getBookID(string $lendingID): int
+    public static function getBookID(string $lendingID)
     {
         $db = Database::connection();
 
